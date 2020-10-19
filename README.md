@@ -61,7 +61,7 @@ the Ansible playbooks. Check out the template for the complete list of parameter
   $ oc new-app -f helpers/coolstore-ansible-installer.yaml \
       --param=DEMO_NAME=msa-full \
       --param=PROJECT_ADMIN=developer \
-      --param=COOLSTORE_GITHUB_REF=ocp-3.10
+      --param=COOLSTORE_GITHUB_REF=ocp-3.10 \
       --param=ANSIBLE_PLAYBOOKS_VERSION=ocp-3.10
 
   $ oc logs -f jobs/coolstore-ansible-installer
