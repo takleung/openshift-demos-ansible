@@ -4,7 +4,7 @@ metadata:
   name: coolstore-ansible-installer
 parameters:
 - displayName: Playbooks Git Repo
-  value: "https://github.com/siamaksade/openshift-demos-ansible"
+  value: "https://github.com/radarlui/openshift-demos-ansible"
   name: GITHUB_REPO
   required: true
 - displayName: Playbooks Git Ref
@@ -64,18 +64,34 @@ objects:
     backoffLimit: 10
     template:
       spec:
+        volumes:
+        - name: shared-data
+          emptyDir: {}
         containers:
+        - image:
+          name: openshift-tools
+          image: registry.redhat.io/openshift4/ose-tools-rhel7
+          volumeMounts:
+          - name: shared-data
+            mountPath: /pod-data
+          command: ["/bin/sh"]
+          args: ["-c", "cp /usr/bin/git /pod-data/"]
         - env:
             - name: NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: PATH
+              value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/shared-data
           args:
           - /demos/playbooks/coolstore/${DEMO_NAME}.yml 
           - -e
           - "github_account=${COOLSTORE_GITHUB_ACCOUNT} github_ref=${COOLSTORE_GITHUB_REF} project_admin=${PROJECT_ADMIN} project_suffix=${PROJECT_SUFFIX} ephemeral=${EPHEMERAL} deploy_guides=${DEPLOY_GUIDES} ${ANSIBLE_EXTRA_VARS}"
           image: siamaksade/openshift-demos-ansible:${ANSIBLE_PLAYBOOKS_VERSION}
           name: coolstore-ansible-installer-job
+          volumeMounts:
+          - name: shared-data
+            mountPath: /shared-data
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
