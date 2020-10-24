@@ -75,7 +75,7 @@ objects:
           - name: shared-data
             mountPath: /pod-data
           command: ["/bin/sh"]
-          args: ["-c", "cp /usr/bin/git /pod-data/"]
+          args: ["-c", "cp /usr/bin/git /pod-data/ ; cp -r /usr/share/git-core /pod/data/"]
         - env:
             - name: NAMESPACE
               valueFrom:
@@ -83,6 +83,8 @@ objects:
                   fieldPath: metadata.namespace
             - name: PATH
               value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/shared-data
+            - name: GIT_TEMPLATE_DIR
+              value: /shared-data/git-core/templates
           args:
           - /demos/playbooks/coolstore/${DEMO_NAME}.yml 
           - -e
