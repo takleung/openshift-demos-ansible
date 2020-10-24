@@ -75,7 +75,7 @@ objects:
           - name: shared-data
             mountPath: /pod-data
           command: ["/bin/sh"]
-          args: ["-c", "cp /usr/bin/git /pod-data/ ; cp -r /usr/share/git-core /pod/data/"]
+          args: ["-c", "cp /usr/bin/git /pod-data/ ; cp -r /usr/share/git-core /pod-data/"]
         - env:
             - name: NAMESPACE
               valueFrom:
