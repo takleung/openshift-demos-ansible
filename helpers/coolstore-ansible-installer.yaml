@@ -79,7 +79,7 @@ objects:
           - name: libexec-gitcore
             mountPath: /libexec-gitcore
           command: ["/bin/sh"]
-          args: ["-c", "cp /usr/bin/git /pod-data/ ; cp -r /usr/share/git-core/templates /pod-data/ ; cp -r /usr/libexec/git-core /libexec-gitcore"]
+          args: ["-c", "cp /usr/bin/git /pod-data/ ; cp -r /usr/share/git-core/templates /pod-data/ ; cp -r /usr/libexec/git-core/* /libexec-gitcore"]
         - env:
             - name: NAMESPACE
               valueFrom:
