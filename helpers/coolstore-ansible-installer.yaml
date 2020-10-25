@@ -99,7 +99,7 @@ objects:
           - name: shared-data
             mountPath: /shared-data
           - name: libexec-gitcore
-            mountPath: /usr/libexec/git-core
+            mountPath: /usr/libexec/git-core/
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
