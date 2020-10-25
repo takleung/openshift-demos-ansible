@@ -67,6 +67,8 @@ objects:
         volumes:
         - name: shared-data
           emptyDir: {}
+        - name: libexec-gitcore
+          emptyDir: {}
         containers:
         - image:
           name: openshift-tools
@@ -74,8 +76,10 @@ objects:
           volumeMounts:
           - name: shared-data
             mountPath: /pod-data
+          - name: libexec-gitcore
+            mountPath: /libexec-gitcore
           command: ["/bin/sh"]
-          args: ["-c", "cp /usr/bin/git /pod-data/ ; cp -r /usr/share/git-core /pod-data/"]
+          args: ["-c", "cp /usr/bin/git /pod-data/ ; cp -r /usr/share/git-core/templates /pod-data/ ; cp -r /usr/libexec/git-core /libexec-gitcore"]
         - env:
             - name: NAMESPACE
               valueFrom:
@@ -84,7 +88,7 @@ objects:
             - name: PATH
               value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/shared-data
             - name: GIT_TEMPLATE_DIR
-              value: /shared-data/git-core/templates
+              value: /shared-data/templates
           args:
           - /demos/playbooks/coolstore/${DEMO_NAME}.yml 
           - -e
@@ -94,6 +98,8 @@ objects:
           volumeMounts:
           - name: shared-data
             mountPath: /shared-data
+          - name: libexec-gitcore
+            mountPath: /usr/libexec/git-core
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
