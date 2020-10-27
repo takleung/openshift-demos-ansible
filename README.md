@@ -64,3 +64,6 @@ $ ansible-playbook playbooks/coolstore/msa-min.yml -e "github_ref=ocp-3.11 ephem
 
 
 For a list of all options, check [demo variables](playbooks/coolstore/group_vars/all)
+
+### Demo Guide
+http://guides-rlui.b542.starter-us-east-2a.openshiftapps.com
