@@ -3,7 +3,7 @@
 
 ### Deploy CoolStore Microservices with CI/CD on OCP 4.x 
 In order to deploy the complete demo infrastructure for demonstrating Microservices, CI/CD, 
-agile integrations and more, order an OCP 4.5 demo environment via RHPDS and then use the following script to provision the demo
+agile integrations and more, order an OCP 4.5 demo environment "OCP Cluster for ER-Demo (self-install )" via RHPDS and then use the following script to provision the demo
 on the OpenShift environment:
 
 #### Prerequisites
