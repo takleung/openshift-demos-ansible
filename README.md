@@ -1,52 +1,22 @@
 # OpenShift Demos Ansible Roles and Playbooks
 [![Build Status](https://travis-ci.org/siamaksade/openshift-demos-ansible.svg?branch=master)](https://travis-ci.org/siamaksade/openshift-demos-ansible)
 
-### Deploy CoolStore Microservices with CI/CD
+### Deploy CoolStore Microservices with CI/CD on OCP 4.x 
 In order to deploy the complete demo infrastructure for demonstrating Microservices, CI/CD, 
-agile integrations and more, either order the demo via RHPDS or use the following script to provision the demo
-on any OpenShift environment:
+agile integrations and more, order an OCP 4.5 demo environment via RHPDS and then use the following script to provision the demo
+on the OpenShift environment:
 
 #### Prerequisites
 
 The following imagestreams should be installed on OpenShift:
 
   ```
-  oc login -u system:admin
-  oc create -n openshift -f https://raw.githubusercontent.com/jboss-fuse/application-templates/master/fis-image-streams.json
-  oc create -n openshift -f https://raw.githubusercontent.com/jboss-openshift/application-templates/ose-v1.4.14/eap/eap64-image-stream.json
-  oc create -n openshift -f https://raw.githubusercontent.com/jboss-openshift/application-templates/ose-v1.4.14/openjdk/openjdk18-image-stream.json
-  oc create -n openshift -f https://raw.githubusercontent.com/jboss-openshift/application-templates/ose-v1.4.14/processserver/processserver64-image-stream.json
-  oc create -n openshift -f https://raw.githubusercontent.com/jboss-openshift/application-templates/ose-v1.4.14/webserver/jws31-tomcat8-image-stream.json
-  oc create -n openshift -f https://raw.githubusercontent.com/jboss-openshift/application-templates/ose-v1.4.14/eap/eap70-image-stream.json
-  oc create -n openshift -f https://raw.githubusercontent.com/jboss-openshift/application-templates/ose-v1.4.14/decisionserver/decisionserver64-image-stream.json
-  oc create -n openshift -f https://raw.githubusercontent.com/jboss-openshift/application-templates/ose-v1.4.14/datagrid/datagrid65-image-stream.json
+  oc login -u <cluster_admin_username>:<password> <ocp_url>
+  oc import-image postgresql:9.5 --from=registry.redhat.io/rhscl/postgresql-95-rhel7:latest -n openshift
+  oc import-image mongodb:3.2 --from=registry.redhat.io/rhscl/mongodb-32-rhel7 -n openshift
+  oc import-image nodejs:4 --from=image-registry.openshift-image-registry.svc:5000/openshift/nodejs@sha256:94f29eed99e9053b916e50df94db3d1fa875f5307fa6bc19d5d516eb5e468d6f -n openshift
   ```
 
-### Run Playbooks Locally (Ansible installed)
-
-* [Install Ansible](http://docs.ansible.com/ansible/latest/intro_installation.html)
-* Run the playbooks
-
-```
-$ git clone https://github.com/siamaksade/openshift-demos-ansible.git
-$ cd openshift-demos-ansible
-$ git checkout ocp-3.11
-$ oc login http://openshiftmaster
-$ ansible-galaxy install -r playbooks/coolstore/requirements.yml
-$ ansible-playbook playbooks/coolstore/msa-cicd-eap-min.yml
-```
-
-### Run Playbooks Locally (Docker installed)
-
-* Install Docker
-* Run the playbooks
-
-```
-$ oc login http://openshiftmaster
-$ docker run --rm -it siamaksade/openshift-demos-ansible:ocp-3.11 playbooks/coolstore/msa-cicd-eap-min.yml \
-      -e "openshift_master=$(oc whoami --show-server)" \
-      -e "oc_token=$(oc whoami -t)"
-```
 
 ### Run Playbooks on OpenShift (with cluster admin)
 
@@ -58,38 +28,17 @@ the Ansible playbooks. Check out the template for the complete list of parameter
   $ oc new-project demo-installer
   $ oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:demo-installer:default
   
-  $ oc new-app -f helpers/coolstore-ansible-installer.yaml \
-      --param=DEMO_NAME=msa-full \
-      --param=PROJECT_ADMIN=developer \
-      --param=COOLSTORE_GITHUB_REF=ocp-3.11
-      --param=ANSIBLE_PLAYBOOKS_VERSION=ocp-3.11
+  $ oc new-app -f https://raw.githubusercontent.com/radarlui/openshift-demos-ansible/master/helpers/coolstore-ansible-installer.yaml \
+    --param=DEMO_NAME=msa-cicd-eap-min \
+    --param=COOLSTORE_GITHUB_ACCOUNT=radarlui \
+    --param=COOLSTORE_GITHUB_REF=ocp-4.x \
+    --param=ANSIBLE_PLAYBOOKS_VERSION=ocp-3.11 \
+    --param=PROJECT_ADMIN=opentlc-mgr \
+    --param=DEPLOY_GUIDES=false
 
-  $ oc logs -f jobs/coolstore-ansible-installer
+  $ oc logs -f jobs/coolstore-ansible-installer -c coolstore-ansible-installer-job
   ```
 
-### Playbooks
-
-**CoolStore Demo**
-
-Demo repository: https://github.com/jbossdemocentral/coolstore-microservice
-
-| Playbook                                                      | Description                                                             | Memory     | CPU     |
-|---------------------------------------------------------------|-------------------------------------------------------------------------|------------|---------|
-| [coolstore/msa-min.yml](playbooks/coolstore/msa-min.yml)                    | Deploys CoolStore with min required services                           | 4 GB       | 1 cores |
-| [coolstore/msa-full.yml](playbooks/coolstore/msa-full.yml)                  | Deploys CoolStore with all services                                     | 8 GB       | 2 cores |
-| [coolstore/msa-cicd-eap-min.yml](playbooks/coolstore/msa-cicd-eap-min.yml)  | Deploys CoolStore with CI/CD and min services (Dev-Prod)                | 8 GB       | 2 cores |
-| [coolstore/msa-cicd-eap-full.yml](playbooks/coolstore/msa-cicd-eap-full.yml)| Deploys CoolStore with CI/CD and all services (Dev-Test-Prod)           | 20 GB      | 8 cores |
-| [coolstore/undeploy.yml](playbooks/coolstore/undeploy.yml)                  | Delete the demo                                                         | -          | -       |
-
-
-**Monolith CI/CD Demo**
-
-Demo repisotory: https://github.com/OpenShiftDemos/openshift-cd-demo
-
-| Playbook                               | Description                 | Memory     | CPU     |
-|----------------------------------------|-----------------------------|------------|---------|
-| [cd/deploy.yml](playbooks/cd/deploy.yml)      | Deploys Monolith CI/CD demo | 8 GB       | 2 cores |
-| [cd/undeploy.yml](playbooks/cd/undeploy.yml)  | Delete the demo             | -          | -       |
 
 
 ### Variables
