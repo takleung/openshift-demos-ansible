@@ -39,7 +39,7 @@ the Ansible playbooks. Check out the template for the complete list of parameter
 
   $ oc logs -f jobs/coolstore-ansible-installer -c coolstore-ansible-installer-job
   ```
-
+  The demo should be ready after the ansible job is completed. If the ansible job fails, you can retry by creating the coolstore-ansible-installer again.
 
 
 ### Variables
