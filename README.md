@@ -15,7 +15,6 @@ The following imagestreams should be installed on OpenShift:
   oc import-image postgresql:9.5 --from=registry.redhat.io/rhscl/postgresql-95-rhel7:latest -n openshift
   oc import-image postgresql:9.6 --from=registry.redhat.io/rhscl/postgresql-96-rhel7:latest -n openshift
   oc import-image mongodb:3.2 --from=registry.redhat.io/rhscl/mongodb-32-rhel7 -n openshift
-  oc import-image nodejs:4 --from=image-registry.openshift-image-registry.svc:5000/openshift/nodejs@sha256:94f29eed99e9053b916e50df94db3d1fa875f5307fa6bc19d5d516eb5e468d6f -n openshift
   ```
 
 
