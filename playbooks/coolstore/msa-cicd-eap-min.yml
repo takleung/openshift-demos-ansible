@@ -22,7 +22,7 @@
         project_desc: "{{ project_cicd_desc }}"
         project_annotations: "demo=demo-modern-arch-{{ project_suffix }}"
         gogs_route: "gogs-{{ project_cicd }}.{{ apps_hostname_suffix }}"
-        gogs_deploy_retry_count: 60
+        gogs_deploy_retry_count: 120
         gogs_deploy_retry_delay: 30
       tags: cicd
 
