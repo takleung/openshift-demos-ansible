@@ -28,9 +28,9 @@ the Ansible playbooks. Check out the template for the complete list of parameter
   $ oc new-project demo-installer
   $ oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:demo-installer:default
   
-  $ oc new-app -f https://raw.githubusercontent.com/radarlui/openshift-demos-ansible/master/helpers/coolstore-ansible-installer.yaml \
+  $ oc new-app -f https://raw.githubusercontent.com/takleung/openshift-demos-ansible/master/helpers/coolstore-ansible-installer.yaml \
     --param=DEMO_NAME=msa-cicd-eap-min \
-    --param=COOLSTORE_GITHUB_ACCOUNT=radarlui \
+    --param=COOLSTORE_GITHUB_ACCOUNT=takleung \
     --param=COOLSTORE_GITHUB_REF=ocp-4.x \
     --param=ANSIBLE_PLAYBOOKS_VERSION=ocp-3.11 \
     --param=PROJECT_ADMIN=opentlc-mgr \
