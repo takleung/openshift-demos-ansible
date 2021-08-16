@@ -33,7 +33,7 @@ the Ansible playbooks. Check out the template for the complete list of parameter
     --param=COOLSTORE_GITHUB_ACCOUNT=takleung \
     --param=COOLSTORE_GITHUB_REF=ocp-4.x \
     --param=ANSIBLE_PLAYBOOKS_VERSION=ocp-3.11 \
-    --param=PROJECT_ADMIN=opentlc-mgr \
+    --param=PROJECT_ADMIN=ray \
     --param=DEPLOY_GUIDES=false
 
   $ oc logs -f jobs/coolstore-ansible-installer -c coolstore-ansible-installer-job
